@@ -48,32 +48,31 @@ window.addEventListener('DOMContentLoaded', function () {
     updateClock();
   };
 
-  countTimer('2 july 2020');
-
   //Menu
   const toggleMenu = () => {
-    const btnMenu = document.querySelector('.menu');
     const menu = document.querySelector('menu');
-    const closeBtn = document.querySelector('.close-btn');
-    const menuItems = menu.querySelectorAll('ul>li');
-
     const handlerMenu = () => menu.classList.toggle('active-menu');
 
-    btnMenu.addEventListener('click', handlerMenu);
-    closeBtn.addEventListener('click', handlerMenu);
-    menuItems.forEach((item) => item.addEventListener('click', function (e) {
-      scrollElem(e, item);
-      handlerMenu();
-    }));
-  };
+    document.body.addEventListener('click', (event) => {
+      let target = event.target;
+      const btnMenu = target.closest('.menu');
+      const closeBtn = target.closest('.close-btn');
+      const menuItems = target.closest('.active-menu ul>li');
+      const menuActive = target.closest('.active-menu');
 
-  toggleMenu();
+      if (btnMenu || closeBtn) handlerMenu();
+      if(!menuActive && !btnMenu) menu.classList.remove('active-menu');
+      if (menuItems) {
+        scrollElem(event, menuItems);
+        handlerMenu();
+      }
+    });
+  };
 
   //Popup
   const togglePopup = () => {
     const popup = document.querySelector('.popup');
     const popupBtn = document.querySelectorAll('.popup-btn');
-    const popupClose = document.querySelector('.popup-close');
     const popupContent = document.querySelector('.popup-content');
 
     let count = 140;
@@ -102,16 +101,25 @@ window.addEventListener('DOMContentLoaded', function () {
       });
     });
 
-    popupClose.addEventListener('click', () => {
-      popup.style.display = 'none';
-      count = 140;
+    popup.addEventListener('click', (event) => {
+      let target = event.target;
+
+      if (target.classList.contains('popup-close')) {
+        popup.style.display = 'none';
+        count = 140;
+      } else {
+        target = target.closest('.popup-content');
+
+        if (!target) {
+          popup.style.display = 'none';
+          count = 140;
+        }
+      }
     });
   };
 
-  togglePopup();
-
   //Scroll
-  function scrollElem(e, item) {
+  const scrollElem = (e, item) => {
     e.preventDefault();
 
     const a = item.querySelector('a');
@@ -127,15 +135,51 @@ window.addEventListener('DOMContentLoaded', function () {
       behavior: 'smooth',
       block: 'start'
     });
-  }
+  };
 
-  function scroll() {
+  const scroll = () => {
     const mouseBtn = document.querySelector('[href="#service-block"]');
     const href = mouseBtn.getAttribute('href');
     mouseBtn.addEventListener('click', function (e) {
       scrollElem(e, mouseBtn);
     });
-  }
+  };
 
+  //Tabs
+  const tabs = () => {
+    const tabHeader = document.querySelector('.service-header');
+    const tab = tabHeader.querySelectorAll('.service-header-tab');
+    const tabContent = document.querySelectorAll('.service-tab');
+
+    const toggleTabContent = (index) => {
+      for (let i = 0; i < tabContent.length; i++) {
+        if (index === i) {
+          tab[i].classList.add('active');
+          tabContent[i].classList.remove('d-none');
+        } else {
+          tab[i].classList.remove('active');
+          tabContent[i].classList.add('d-none');
+        }
+      }
+    };
+
+    tabHeader.addEventListener('click', (event) => {
+      let target = event.target;
+      target = target.closest('.service-header-tab');
+
+      if (target) {
+        tab.forEach((item, i) => {
+          if (item === target) {
+            toggleTabContent(i);
+          }
+        });
+      }
+    });
+  };
+
+  countTimer('2 july 2020');
+  toggleMenu();
+  togglePopup();
   scroll();
+  tabs();
 });
