@@ -191,6 +191,7 @@ window.addEventListener('DOMContentLoaded', function () {
     const addDot = () => {
       dot = document.createElement('li');
       dot.classList.add('dot');
+
       for (let i = 0; i < slide.length; i++) {
         dot = dot.cloneNode();
         dots.append(dot);
@@ -282,10 +283,49 @@ window.addEventListener('DOMContentLoaded', function () {
     startSlide(1500);
   };
 
+  //Team
+  const team = () => {
+    const command = document.querySelector('.command');
+
+    const mouseHover = (event) => {
+      let target = event.target;
+      const commandPhoto = target.closest('.command__photo');
+
+      if (commandPhoto) {
+        const src = target.getAttribute('src');
+
+        target.setAttribute('src', target.getAttribute('data-img'));
+        target.setAttribute('data-img', src);
+      }
+    };
+
+    command.addEventListener('mouseover', (event) => {
+      mouseHover(event);
+    });
+
+    command.addEventListener('mouseout', (event) => {
+      mouseHover(event);
+    });
+  };
+
+  //Calc
+  const calc = () => {
+    const calcBlock = document.querySelector('.calc-block');
+
+    calcBlock.addEventListener('input', (event) =>{
+      let target = event.target;
+      const input = target.closest('input');
+
+      if(input) input.value = input.value.replace(/\D/, '');
+    });
+  };
+
   countTimer('2 july 2020');
   toggleMenu();
   togglePopup();
   scroll();
   tabs();
   slider();
+  team();
+  calc();
 });
