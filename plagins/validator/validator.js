@@ -109,7 +109,7 @@ class Validator {
 
   setPattern() {
     if (!this.pattern.phone) this.pattern.phone = /^\+?[78]([-()]*\d){10}$/;
-    if (!this.pattern.email) this.pattern.email = /^\w+@\w+\.\w{2,}$/;
+    if (!this.pattern.email) this.pattern.email = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     if (!this.pattern.name) this.pattern.name = /^[^a-zA-Z][^a-zA-Z0-9-_\.]{1,20}$/;
     if (!this.pattern.message) this.pattern.message = /^[^a-zA-Z][^a-zA-Z0-9-_\.]{1,20}$/;
   }
