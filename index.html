@@ -316,8 +316,10 @@
                                        placeholder="Номер телефона" required>
                             </div>
                             <div class="col-md-12 col-sm-12 col-12">
-                                <input class="mess" id="form2-message" name="user_message"
-                                       placeholder="Ваше сообщение">
+                                <div class="position-relative mt-5">
+                                    <input class="mess mt-0" id="form2-message" name="user_message"
+                                           placeholder="Ваше сообщение">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -397,15 +399,15 @@
         <div class="main-form">
             <h3>Введите свои данные для связи с нами!</h3>
             <form id="form3" name="user_form">
-                <div>
+                <div class="position-relative">
                     <input type="text" class="form-name" id="form3-name" name="user_name" placeholder="Ваше имя"
                            required>
                 </div>
-                <div>
+                <div class="position-relative">
                     <input type="tel" class="form-phone" id="form3-phone" name="user_phone"
                            placeholder="Ваш номер телефона" required>
                 </div>
-                <div>
+                <div class="position-relative">
                     <input type="email" class="form-email" id="form3-email" name="user_email"
                            placeholder="Ваш E-mail">
                 </div>
@@ -414,6 +416,75 @@
         </div>
     </div>
 </div>
+<script src="plagins/validator/validator.js"></script>
+
+<script>
+  const validOne = new Validator({
+    selector: '#form1',
+    pattern: {},
+    method: {
+      'user_phone': [
+        ['notEmpty'],
+        ['pattern', 'phone'],
+      ],
+      'user_email': [
+        ['notEmpty'],
+        ['pattern', 'email'],
+      ],
+      'user_name': [
+        ['notEmpty'],
+        ['pattern', 'name'],
+      ],
+    }
+  });
+
+  const validTwo = new Validator({
+    selector: '#form2',
+    pattern: {},
+    method: {
+      'user_phone': [
+        ['notEmpty'],
+        ['pattern', 'phone'],
+      ],
+      'user_email': [
+        ['notEmpty'],
+        ['pattern', 'email'],
+      ],
+      'user_name': [
+        ['notEmpty'],
+        ['pattern', 'name'],
+      ],
+      'user_message': [
+        ['notEmpty'],
+        ['pattern', 'message'],
+      ]
+    }
+  });
+
+  const validThree = new Validator({
+    selector: '#form3',
+    pattern: {},
+    method: {
+      'user_phone': [
+        ['notEmpty'],
+        ['pattern', 'phone'],
+      ],
+      'user_email': [
+        ['notEmpty'],
+        ['pattern', 'email'],
+      ],
+      'user_name': [
+        ['notEmpty'],
+        ['pattern', 'name'],
+      ],
+    }
+  });
+
+  validOne.init();
+  validTwo.init();
+  validThree.init();
+</script>
+
 <script src="script/script.js"></script>
 </body>
 </html>
