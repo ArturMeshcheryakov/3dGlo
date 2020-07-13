@@ -378,7 +378,7 @@ window.addEventListener('DOMContentLoaded', function () {
         dayValue *= 1.5;
       }
 
-      if (typeValue && squareValue) total = price * typeValue * squareValue * countValue * dayValue;
+      if (typeValue && squareValue) total = Math.round(price * typeValue * squareValue * countValue * dayValue);
 
       setValue(totalValue, total);
     };
@@ -405,7 +405,7 @@ window.addEventListener('DOMContentLoaded', function () {
     const successMessage = 'Спасибо! Мы скоро с вами свяжемся!';
     const form = document.querySelectorAll('form');
     const statusMessage = document.createElement('div');
-    statusMessage.classList.add('status__massage');
+    statusMessage.classList.add('status__message');
     statusMessage.style.cssText = `
       font-size: 2rem;
     `;
@@ -471,15 +471,32 @@ window.addEventListener('DOMContentLoaded', function () {
             });
           };
 
-          postData(body,
-            () => {
+          /*postData(body,
+           () => {
+           statusMessage.textContent = successMessage;
+           setTimeout(() => {
+           animation();
+           }, 1500);
+           formClear();
+           },
+           (error) => {
+           statusMessage.textContent = errorMessage;
+           setTimeout(() => {
+           animation();
+           }, 1500);
+           formClear();
+           console.error(error);
+           });*/
+
+          postData(body)
+            .then(() => {
               statusMessage.textContent = successMessage;
               setTimeout(() => {
                 animation();
               }, 1500);
               formClear();
-            },
-            (error) => {
+            })
+            .catch((error) => {
               statusMessage.textContent = errorMessage;
               setTimeout(() => {
                 animation();
@@ -496,7 +513,7 @@ window.addEventListener('DOMContentLoaded', function () {
     });
 
     const animation = () => {
-      const animMessage = document.querySelector('.status__massage');
+      const animMessage = document.querySelector('.status__message');
       let anim = animMessage.animate([
         {opacity: '1'},
         {opacity: '0'}
@@ -508,20 +525,22 @@ window.addEventListener('DOMContentLoaded', function () {
       })
     };
 
-    const postData = (body, outputData, errorData) => {
-      const request = new XMLHttpRequest();
-      request.addEventListener('readystatechange', () => {
-        if (request.readyState !== 4) return;
-        if (request.status === 200) {
-          outputData();
-        } else {
-          errorData(request.status);
-        }
-      });
+    const postData = (body) => {
+      return new Promise((resolve, reject) => {
+        const request = new XMLHttpRequest();
+        request.addEventListener('readystatechange', () => {
+          if (request.readyState !== 4) return;
+          if (request.status === 200) {
+            resolve();
+          } else {
+            reject(request.status);
+          }
+        });
 
-      request.open('POST', './server.php');
-      request.setRequestHeader('Content-Type', 'application/json');
-      request.send(JSON.stringify(body));
+        request.open('POST', './server.php');
+        request.setRequestHeader('Content-Type', 'application/json');
+        request.send(JSON.stringify(body));
+      });
     };
   };
 
