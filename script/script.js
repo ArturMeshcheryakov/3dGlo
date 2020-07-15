@@ -471,25 +471,11 @@ window.addEventListener('DOMContentLoaded', function () {
             });
           };
 
-          /*postData(body,
-           () => {
-           statusMessage.textContent = successMessage;
-           setTimeout(() => {
-           animation();
-           }, 1500);
-           formClear();
-           },
-           (error) => {
-           statusMessage.textContent = errorMessage;
-           setTimeout(() => {
-           animation();
-           }, 1500);
-           formClear();
-           console.error(error);
-           });*/
-
           postData(body)
-            .then(() => {
+            .then((response) => {
+              if (response.status !== 200) {
+                throw new Error('status network not 200');
+              }
               statusMessage.textContent = successMessage;
               setTimeout(() => {
                 animation();
@@ -526,25 +512,17 @@ window.addEventListener('DOMContentLoaded', function () {
     };
 
     const postData = (body) => {
-      return new Promise((resolve, reject) => {
-        const request = new XMLHttpRequest();
-        request.addEventListener('readystatechange', () => {
-          if (request.readyState !== 4) return;
-          if (request.status === 200) {
-            resolve();
-          } else {
-            reject(request.status);
-          }
-        });
-
-        request.open('POST', './server.php');
-        request.setRequestHeader('Content-Type', 'application/json');
-        request.send(JSON.stringify(body));
+      return fetch('./server.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
       });
     };
   };
 
-  countTimer('2 july 2020');
+  countTimer('2 august 2020');
   toggleMenu();
   togglePopup();
   scroll();
